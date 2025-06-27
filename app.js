@@ -8,6 +8,9 @@ const cors = require("cors");
 const helmet = require("helmet"); // Add helmet for security headers
 const { getSubscribers } = require("./controllers/subscriberController");
 const { submitContactForm } = require("./controllers/newsletterController");
+const cron = require('node-cron');
+const axios = require('axios');
+
 
 dotenv.config();
 connectDB();
@@ -32,6 +35,17 @@ app.use((req, res, next) => {
   // Content Security Policy - adjust as needed for your app
   res.setHeader('Content-Security-Policy', "default-src 'self'");
   next();
+});
+
+
+// Ping your own server every 14 minutes
+cron.schedule('*/14 * * * *', async () => {
+  try {
+    await axios.get("https://your-app-name.onrender.com");
+    console.log("Self-ping sent to keep server awake");
+  } catch (error) {
+    console.error("Ping failed:", error.message);
+  }
 });
 
 app.use(express.json());
