@@ -41,9 +41,7 @@ app.use((req, res, next) => {
 // Ping your own server every 14 minutes
 cron.schedule('*/1 * * * *', async () => {
   try {
-await axios.get('https://backend-perfumme.onrender.com/', { timeout: 5000 });
-
-
+    const response = await axios.get(process.env.PING_URL, { timeout: 5000 });
     console.log("Self-ping sent to keep server awake:", response.status);
   } catch (error) {
     console.error("Ping failed:", error.message);
@@ -61,7 +59,6 @@ app.use("/api/contact", submitContactForm);
 app.get('/', (req, res) => {
   res.send('Server is running!');
 });
-
 
 
 
