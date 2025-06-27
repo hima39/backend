@@ -39,10 +39,11 @@ app.use((req, res, next) => {
 
 
 // Ping your own server every 14 minutes
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/14 * * * *', async () => {
   try {
     const response = await axios.get(process.env.PING_URL, { timeout: 5000 });
-    console.log("Self-ping sent to keep server awake:", response.status);
+   console.log(`Self-ping sent at ${new Date().toLocaleTimeString()} with status: ${response.status}`);
+
   } catch (error) {
     console.error("Ping failed:", error.message);
   }
