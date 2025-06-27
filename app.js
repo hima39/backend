@@ -39,14 +39,16 @@ app.use((req, res, next) => {
 
 
 // Ping your own server every 14 minutes
-cron.schedule('*/14 * * * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
   try {
-    await axios.get(process.env.PING_URL, { timeout: 5000 });
-    console.log("Self-ping sent to keep server awake");
+await axios.get('https://backend-perfumme.onrender.com/', { timeout: 5000 });
+
+
+    console.log("Self-ping sent to keep server awake:", response.status);
   } catch (error) {
     console.error("Ping failed:", error.message);
   }
-})
+});
 
 app.use(express.json());
 app.use("/api/products", productRoutes);
@@ -55,6 +57,13 @@ app.use('/api/getsubscribers', getSubscribers);
 app.use('/api/newsletter', subscriberRoutes);
 app.use('/api/auth', authRoutes);
 app.use("/api/contact", submitContactForm);
+
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
