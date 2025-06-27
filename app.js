@@ -41,12 +41,12 @@ app.use((req, res, next) => {
 // Ping your own server every 14 minutes
 cron.schedule('*/14 * * * *', async () => {
   try {
-    await axios.get("https://backend-perfumme.onrender.com");
+    await axios.get(process.env.PING_URL, { timeout: 5000 });
     console.log("Self-ping sent to keep server awake");
   } catch (error) {
     console.error("Ping failed:", error.message);
-  }
-});
+  }
+})
 
 app.use(express.json());
 app.use("/api/products", productRoutes);
